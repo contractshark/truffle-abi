@@ -14,20 +14,20 @@ Run it from your truffle project directory:
 
 ```shell
 $ truffle-abi
-notice: ABI extracted and output file wrote to: build/ABI.json
+notice: ABI extracted and output file wrote to: abi/xxx.json
 ```
 
 Run it from anywhere:
 
 ```shell
-$ truffle-abi -d /home/user/myproject/build/contracts/ -o /home/user/myproject/build/abi.json -v
-notice: ABI extracted and output file wrote to: /home/user/myproject/build/abi.json
+$ truffle-abi -d /home/user/myproject/build/contracts/ -o /home/user/myproject/build/abi/ -v
+notice: ABI extracted and output file wrote to: /home/user/myproject/build/abi/xxx.json
 ```
 
 Options:
 
 -   `-d / --directory`: location of the build files, [build/contracts] by default
--   `-o / --output`: output file, [build/ABI.json] by default
+-   `-o / --output`: output file, [build/abi] by default
 -   `-v / --verbose`
 
 # Build, run, example
@@ -37,8 +37,8 @@ Options:
 $ npm install
 ```
 
-I included a stripped example of a ERC721 token files, you can ru
+I included a stripped example of a ERC721 token files, you can run
 
 ```shell
-$ node index.js -v -d example/ -o abi.json
+$ node index.js -v -d example/ -o abi/
 ```

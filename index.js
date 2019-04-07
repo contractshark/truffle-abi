@@ -25,7 +25,7 @@ function exportAbiForFile(filename) {
     const data = fs.readFileSync(filename);
     const jsonData = JSON.parse(data);
     if (jsonData.hasOwnProperty("abi")) {
-      logger.info("Found ABI in: " + filename);
+      logger.info("read: " + filename);
       return jsonData["abi"];
     }
   }
@@ -35,7 +35,7 @@ function exportAbiForFile(filename) {
 function exportAbiForDirectory(directory) {
   var res = [];
   const fileList = fs.readdirSync(directory);
-  logger.info("Looking for json files in: " + directory);
+  logger.info("looking for json files in: " + directory);
   fileList.forEach(filename => {
     jsonAbi = exportAbiForFile(path.join(directory, filename));
     if (jsonAbi !== null) {
@@ -52,7 +52,7 @@ function printHelp() {
       " -d /home/user/myproject/build/contracts/ -v\n" +
       "Options:\n" +
       "   -d / --directory: location of the build files, [build/contracts] by default\n" +
-      "   -o / --output: output file, [build/ABI.json] by default\n" +
+      "   -o / --output: output directory, [abi/] by default\n" +
       "   -v / --verbose"
   );
 }
@@ -61,16 +61,29 @@ function main() {
   var args = minimist(process.argv.slice(2), {
     alias: { d: "directory", v: "verbose", o: "output" },
     boolean: ["verbose"],
-    default: { d: "build/contracts", o: "build/ABI.json" }
+    default: { d: "build/contracts", o: "build/abi" }
   });
   if (args.verbose) {
     logger.level = "info";
   }
   fs.stat(args.directory, (err, stats) => {
     if (!err && stats.isDirectory()) {
-      abi = exportAbiForDirectory(args.directory);
-      fs.writeFileSync(args.output, JSON.stringify(abi, null, 2));
-      logger.notice("ABI extracted and output file wrote to: " + args.output);
+      //abi = exportAbiForDirectory(args.directory);
+      const fileList = fs.readdirSync(args.directory);
+      logger.info("looking for json files in: " + args.directory);
+      if (!fs.existsSync(args.output)){
+        fs.mkdirSync(args.output);
+      }
+      fileList.forEach(filename => {
+        let jsonAbi = exportAbiForFile(path.join(args.directory, filename));
+        if (jsonAbi !== null) {
+          let outputFile = path.join(args.output, filename);
+          fs.writeFileSync(outputFile, JSON.stringify(jsonAbi, null, 2));
+          logger.notice("abi -> " + outputFile);           
+        }
+      });
+      logger.notice("Done!");
+
     } else {
       logger.error(
         '"' +

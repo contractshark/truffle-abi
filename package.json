@@ -1,6 +1,6 @@
 {
 	"name": "truffle-abi",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Export ABIs from truffle build files",
 	"main": "index.js",
 	"repository": "http://github.com/coolcode/truffle-abi",
